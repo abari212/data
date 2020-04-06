@@ -131,7 +131,7 @@ spread_w <- ggplot() +
   coord_fixed() + 
   labs(title = "Covid-19 Spread",
        subtitle = "Covid-19 worldwide spread from 21 Jan - 31 Mar, 2020 - OperAI",
-       x = "Long", y = "") + # cause we don't need x and y labels do we? 
+       x = "Longitude", y = "Latitude") + # coordinates 
   geom_point(data = dataset, aes(x = dataset$x, y = dataset$y,  size= 10*dataset$confirmed_cases, colour ="orange")) +
   theme_bw()
 
