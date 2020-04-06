@@ -89,36 +89,23 @@ unzip(zipfile = "coastlines.zip",
 world_map <- readOGR("world_map/ne_10m_coastline.shp")
 ## OGR data source with driver: ESRI Shapefile 
 
-# view spatial attributes
+# Map spatial attributes and extent
 class(world_map)
-## [1] "SpatialLinesDataFrame"
-## attr(,"package")
-## [1] "sp"
 extent(world_map)
 
+# Projecion information of the map
 crs(coastlines)
-## CRS arguments:
-##  +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0
-# Super speedy quick plot with R baseplot â¦ or not. Be patient - this object has a lot of complex features
 
+# Display the map
 plot(coastlines, 
      main = "World Map")
 
-# This particular layer is complex. There are many details in the boundaries as rendered that we may want if we zoom in but may not need to produce a global map. letâs Simplify it. The gSimplify function is a part of the rgeos package. The simplify function removes vertices from complex lines. Remember that a line is composed of vertices. A circle is simply a line with lots of vertices - the more vertices it has, the more âroundâ the line appears.
-# Simplify vertices
-# As you use this function keep in mind that you are modifying your data. You probably donât want to do this if you are performing any sort of quantitative analysis on the data but you definitely want to do this if you are creating online maps and other visual products from your data.
-# The gSimplify function takes 3 arguments
-# the data that you want to simplify
-# tol - the tolerance value - a large number will remove more vertices, make the data small AND yield a âblockierâ looking object. a SMALLER number will retain more vertices and maintain a smoother looking feature.
-# simplify geometry
+# To limit and simplify the geometry of the map
 world_map_simp <- gSimplify(world_map, 
                              tol = 3, 
                              topologyPreserve = TRUE)
 plot(world_map_simp,
      main = "World map with boundaries simplified")
-
-
-# Notice that here the map plots faster, but now it looks blocky. We may have simplified TOO MUCH. letâs reduce the tol = argument value to .1.
 
 # simplify with a lower tolerance value (keeping more detail)
 world_map_2 <- gSimplify(world_map, 
@@ -127,15 +114,10 @@ world_map_2 <- gSimplify(world_map,
 plot(world_map_2, 
      main = "World Map")
 
-
-
-
 # Convert map data into data frame to use with ggplot
 world_map_df <- SpatialLinesDataFrame(world_map_2,
                                             coastlines@data) 
-#tidy(coastlines_sim2_df)
-
-# plot the data 
+# Dsiplay the map 
 ggplot() +
   geom_path(data = world_map_df, aes(x = long, y = lat, group = group)) +
   labs(title = "World Map")
