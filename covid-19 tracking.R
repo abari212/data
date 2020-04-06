@@ -140,3 +140,31 @@ spread_w <- spread_w + transition_time(dataset$day) + labs(title = "Time (Day): 
 spread_w
 
 anim_save("spread_w.gif", spread)
+
+###
+
+# Track the spread on a map
+library(rgdal)
+library(raster)
+library(sf)
+
+
+spread <- ggplot() +
+  geom_path(data = world_map_df, aes(x = long, y = lat, group = group, colour ="lightgrey")) + 
+  coord_fixed() + 
+  scale_color_viridis_d() +
+  scale_size(range = c(0, 30)) +
+  labs(title = "Covid-19 Spread",
+       subtitle = "Covid-19 worldwide spread since 21 Jan, 2020 - OperAI",
+       x = "Longitude", y = "Latitude") + # cause we don't need x and y labels do we? 
+  geom_point(data = dataset, aes(x = dataset$x, y = dataset$y,  size= dataset$confirmed_cases, colour =dataset$country)) +
+  theme_bw()+
+  theme(legend.position = "none")
+
+spread <- spread + transition_time(dataset$day) + labs(title = "Time (Day): {frame_time}")
+
+spread 
+
+anim_save("spread_w.gif", spread)
+
+
