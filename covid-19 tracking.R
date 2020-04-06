@@ -1,4 +1,4 @@
-# spread tracking and modeling of covid619
+# spread tracking and modeling of covid-19
 ###########
 setwd("D:/covid-19/") # as a working directory to store, prepare and analyse data
 
